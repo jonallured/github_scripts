@@ -1,4 +1,5 @@
 require 'yaml'
+require 'fileutils'
 require 'octokit'
 
 if ARGV.first == nil
@@ -6,6 +7,8 @@ if ARGV.first == nil
   puts "  $ ruby script.rb 2017-01"
   exit 1
 end
+
+FileUtils.mkdir_p('reports')
 
 date = Date.parse "#{ARGV.first}-01"
 
@@ -40,7 +43,7 @@ puts "\n"
 
 pretty_date = date.strftime('%Y-%m')
 
-File.open("report-#{pretty_date}.md", 'w') do |f|
+File.open("reports/report-#{pretty_date}.md", 'w') do |f|
   f.puts "# Report for #{pretty_date}"
   for full_name, pulls in results
     puts "#{full_name} => #{pulls.count}"
