@@ -3,7 +3,8 @@ require 'octokit'
 
 class Checker
   def self.send_keys
-    command = "tmux send-keys -t volt:0.0 'rake; jay done' Enter"
+    volt_command = 'git checkout master --quiet && git branch -D colossus-build-me && git fetch origin --tags --quiet && git checkout tags/colossus-build-me -b colossus-build-me && hokusai test; jay done'
+    command = "tmux send-keys -t volt:0.0 '#{volt_command}' Enter"
     system(command)
   end
 
@@ -15,12 +16,12 @@ class Checker
 
   def check
     @found_new = false
-    events = @client.repository_events("jonallured/volt")
+    events = @client.repository_events('jonallured/volt')
 
     create_tag_events = events.select do |event|
-      event.type == "CreateEvent" &&
-        event.payload.ref_type == "tag" &&
-        event.payload.ref == "colossus-build-me"
+      event.type == 'CreateEvent' &&
+        event.payload.ref_type == 'tag' &&
+        event.payload.ref == 'colossus-build-me'
     end
 
     results = create_tag_events.map do |event|
@@ -41,14 +42,14 @@ client = Octokit::Client.new(access_token: access_token)
 checker = Checker.new(client)
 
 loop do
-  puts "checking..."
+  puts 'checking...'
   checker.check
   if checker.found_new?
-    puts "sending keys..."
+    puts 'sending keys...'
     Checker.send_keys
   end
-  puts "sleeping..."
-  puts ?**80
+  puts 'sleeping...'
+  puts '*' * 80
   sleep 10
 end
 
