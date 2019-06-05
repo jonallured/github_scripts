@@ -2,7 +2,7 @@ require 'yaml'
 require 'fileutils'
 require 'octokit'
 
-puts "this script is defunct and i'm not going to fix it because we don't do allocations like we used to at Artsy. i leave it here simply as something to learn from."
+puts "this script is defunct and i'm not going to fix it because we don't do allocations like we used to at Artsy"
 exit 1
 
 if ARGV.first == nil
