@@ -1,0 +1,1 @@
+ruby software_cap.rb | xargs -I % sh -c '{ sleep 1; open %; }'
